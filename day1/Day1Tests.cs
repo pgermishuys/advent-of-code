@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Shouldly;
+﻿using Shouldly;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -167,7 +162,7 @@ namespace Day1
 
                 currentDepth = newDepth;
             }
-            analysis.Count(x => x > 0).ShouldBe(8);
+            analysis.Count(x => x > 0).ShouldBe(1457);
         }
     }
 }

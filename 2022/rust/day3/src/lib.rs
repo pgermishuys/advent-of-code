@@ -23,8 +23,7 @@ mod tests {
             let comp1: HashSet<char> = HashSet::from_iter(compartment1.iter().cloned());
             let comp2: HashSet<char> = HashSet::from_iter(compartment2.iter().cloned());
             let intersect = comp1.intersection(&comp2);
-            let p = priority.iter().position(|&x| x == intersect.to_owned().into_iter().nth(0).unwrap().to_owned()).unwrap() + 1;
-            sum += p;
+            sum += priority.iter().position(|&x| x == intersect.to_owned().into_iter().nth(0).unwrap().to_owned()).unwrap() + 1;
         }
         assert_eq!(sum, 7581);
     }
@@ -39,7 +38,6 @@ mod tests {
         let mut compartment_number = 0;
         let mut compartments: Vec<Vec<char>> = Vec::new();
         for line in contents.lines() {
-            println!("line: {:?}", line);
             let mut compartment = Vec::new();
             for character in line.chars() {
                 compartment.push(character);
@@ -47,20 +45,19 @@ mod tests {
             compartments.push(compartment);
             if compartment_number == 2 {
                 compartment_number = 0;
-                compartments.clear();
 
                 let comp1: HashSet<char> = HashSet::from_iter(compartments[0].iter().cloned());
                 let comp2: HashSet<char> = HashSet::from_iter(compartments[1].iter().cloned());
                 let comp3: HashSet<char> = HashSet::from_iter(compartments[2].iter().cloned());
-                let iter = [comp1, comp2, comp3].iter();
-                let intersection = iter.next().map(|set| iter.fold(set, |set1, set2| set1 & set2));
 
-                let intersect = comp1.intersection(&comp2);
-                let p = priority.iter().position(|&x| x == intersect.to_owned().into_iter().nth(0).unwrap().to_owned()).unwrap() + 1;
+                let intersect = &(&comp1 & &comp2) & &comp3;
+                sum += priority.iter().position(|&x| x == intersect.to_owned().into_iter().nth(0).unwrap().to_owned()).unwrap() + 1;
+
+                compartments.clear();
                 continue;
             }
             compartment_number += 1;
         }
-        assert_eq!(sum, 7581);
+        assert_eq!(sum, 2525);
     }
 }

@@ -33,10 +33,10 @@ mod tests {
         stacks.iter().position(|x| x.column == column)
     }
 
-    fn process_movements(contents: &String, stacks: &mut Vec<Stack>) {
-        let mut start_tracking_movements = false;
+    fn perform_instructions(contents: &String, retain_order: bool, stacks: &mut Vec<Stack>) {
+        let mut start_tracking_instructions = false;
         for line in contents.lines() {
-            if start_tracking_movements {
+            if start_tracking_instructions {
                 let instruction = Instruction::from(line);
                 let mut items_to_move: Vec<char> = Vec::new();
                 for _ in 0..instruction.quantity {
@@ -44,6 +44,9 @@ mod tests {
                         let item = stacks[stack_index].get_and_remove_first_item();
                         items_to_move.push(item);
                     }
+                }
+                if !retain_order {
+                    items_to_move.reverse();
                 }
                 for item in items_to_move {
                     if let Some(stack_index) = get_stack_index(instruction.to, &stacks) {
@@ -53,7 +56,7 @@ mod tests {
             }
 
             if line.is_empty() {
-                start_tracking_movements = true;
+                start_tracking_instructions = true;
             }
         }
     }
@@ -97,13 +100,13 @@ mod tests {
         }
     }
 
-    #[test]
+    // #[test]
     fn day5_part1() {
         let contents =
             fs::read_to_string("input.txt").expect("Something went wrong reading the file");
 
         let mut stacks = sort_items_into_stacks(&contents);
-        process_movements(&contents, &mut stacks);
+        perform_instructions(&contents, true, &mut stacks);
         let mut top_items :Vec<char> = Vec::new();
         for i in 0..stacks.len() {
             let index = get_stack_index(i, &stacks).unwrap();
@@ -119,5 +122,19 @@ mod tests {
     fn day5_part2() {
         let contents =
             fs::read_to_string("input.txt").expect("Something went wrong reading the file");
+
+        let contents =
+            fs::read_to_string("input.txt").expect("Something went wrong reading the file");
+
+        let mut stacks = sort_items_into_stacks(&contents);
+        perform_instructions(&contents, false, &mut stacks);
+        let mut top_items :Vec<char> = Vec::new();
+        for i in 0..stacks.len() {
+            let index = get_stack_index(i, &stacks).unwrap();
+            let items = stacks[index].items.to_owned();
+            top_items.push(items.first().unwrap().to_owned());
+        }
+
+        println!("top items: {:?}", top_items);
     }
 }

@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod tests {
     use std::{fs, fmt, collections::HashMap};
+    //from: https://github.com/Ottigan/advent_of_code/blob/main/day7/src/main.rs
     #[test]
     fn day7_part1() {
         let contents =
